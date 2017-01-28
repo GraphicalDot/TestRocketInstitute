@@ -1,0 +1,144 @@
+<div class="row">
+    <form name="studentForm" class="student-form">
+        <div class="panel panel-default">
+        <div class="panel-heading">
+            <h4 class="panel-title"><span ng-if="!student.id">Enter</span><span ng-if="student.id">Edit</span> details of the student</h4>
+        </div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="form-group col-sm-6">
+                    <label class="col-sm-3 control-label" ng-class="{'has-error': error && error.name}">Full Name</label>
+                    <div class="col-sm-7">
+                        <input type="text" id="name" placeholder="Enter name" class="form-control" ng-model="student.name">
+                        <label class="error" for="name" ng-show="error && error.name">{{ error.message }}</label>
+                    </div>
+                </div>
+                <div class="form-group col-sm-6">
+                    <label class="col-sm-3 control-label" ng-class="{'has-error': error && error.father_name}">Father's Name</label>
+                    <div class="col-sm-7">
+                        <input type="text" id="father_name" placeholder="Enter father's name" class="form-control" ng-model="student.father_name">
+                        <label class="error" for="father_name" ng-show="error && error.father_name">{{ error.message }}</label>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-sm-6">
+                    <label class="col-sm-3 control-label" ng-class="{'has-error': error && error.city}">City</label>
+                    <div class="col-sm-7">
+                        <input type="text" id="city" placeholder="Enter city" class="form-control" ng-model="student.city">
+                        <label class="error" for="city" ng-show="error && error.city">{{ error.message }}</label>
+                    </div>
+                </div>
+                <div class="form-group col-sm-6">
+                    <label class="col-sm-3 control-label" ng-class="{'has-error': error && error.father_mobile_no}">Father's Mobile</label>
+                    <div class="col-sm-7">
+                        <input type="text" id="father_mobile_no" placeholder="Enter father's mobile no" class="form-control" ng-model="student.father_mobile_no">
+                        <label class="error" for="father_mobile_no" ng-show="error && error.father_mobile_no">{{ error.message }}</label>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-sm-6">
+                    <label class="col-sm-3 control-label" ng-class="{'has-error': error && error.area}">Area</label>
+                    <div class="col-sm-7">
+                        <input type="text" id="area" placeholder="Enter area" class="form-control" ng-model="student.area">
+                        <label class="error" for="area" ng-show="error && error.area">{{ error.message }}</label>
+                    </div>
+                </div>
+                <div class="form-group col-sm-6">
+                    <label class="col-sm-3 control-label" ng-class="{'has-error': error && error.father_email}">Father's Email</label>
+                    <div class="col-sm-7">
+                        <input type="text" id="father_email" placeholder="Enter father's email" class="form-control" ng-model="student.father_email">
+                        <label class="error" for="father_email" ng-show="error && error.father_email">{{ error.message }}</label>
+                    </div>
+                </div>
+            </div>
+            <div class="row mb15">
+                <div class="form-group col-sm-3 col-sm-offset-2">
+                    <label class="col-sm-2 control-label" ng-class="{'has-error': error && error.pin}">Pin</label>
+                    <div class="col-sm-10">
+                        <input type="text" id="pin" placeholder="Enter pin" class="form-control ng-pristine ng-untouched ng-valid" ng-model="student.pin">
+                        <label class="error ng-binding ng-hide" for="area" ng-show="error && error.pin">{{ error.message }}</label>
+                    </div>
+                </div>
+            </div>
+            <div class="row mb15">
+                <div class="form-group col-sm-6">
+                    <label class="col-sm-3 control-label" ng-class="{'has-error': error && error.mobile_no}">Mobile</label>
+                    <div class="col-sm-7">
+                        <input type="text" id="mobile_no" placeholder="Enter mobile no" class="form-control" ng-model="student.mobile_no">
+                        <label class="error" for="mobile_no" ng-show="error && error.mobile_no">{{ error.message }}</label>
+                    </div>
+                </div>
+            </div>
+            <div class="row mb15">
+                <div class="form-group col-sm-6">
+                    <label class="col-sm-3 control-label" ng-class="{'has-error': error && error.email}">Email</label>
+                    <div class="col-sm-7">
+                        <input type="email" id="email" placeholder="Enter email" class="form-control" ng-model="student.email">
+                        <label class="error" for="email" ng-show="error && error.email">{{ error.message }}</label>
+                    </div>
+                </div>
+            </div>
+            <div class="row mb15">
+                <div class="form-group col-sm-6">
+                    <label class="col-sm-3 control-label" ng-class="{'has-error': error && error.password}">Password</label>
+                    <div class="col-sm-7">
+                        <input type="password" id="password" placeholder="{{ student.id ? 'Change password': 'Enter password' }}" class="form-control" ng-model="student.password">
+                        <label class="error" for="password" ng-show="error && error.password">{{ error.message }}</label>
+                    </div>
+                </div>
+            </div>
+            <div class="row mb15">
+                <div class="form-group col-sm-6">
+                    <label class="col-sm-3 control-label" ng-class="{'has-error': error && error.school}">School</label>
+                    <div class="col-sm-7">
+                        <input type="text" id="school" placeholder="Enter school" class="form-control" ng-model="student.school">
+                        <label class="error" for="school" ng-show="error && error.school">{{ error.message }}</label>
+                    </div>
+                </div>
+            </div>
+            <div class="row mb15">
+                <div class="form-group col-sm-6">
+                    <label class="col-sm-3 control-label" ng-class="{'has-error': error && error.ntse_score}">NTSE Score</label>
+                    <div class="col-sm-7">
+                        <input type="text" id="ntse_score" placeholder="Enter NTSE score" class="form-control" ng-model="student.ntse_score">
+                        <label class="error" for="ntse_score" ng-show="error && error.ntse_score">{{ error.message }}</label>
+                    </div>
+                </div>
+            </div>
+            <div class="row mb15">
+                <div class="form-group col-sm-6">
+                    <label class="col-sm-3 control-label" ng-class="{'has-error': error && error.batch_ids}">Select Batches</label>
+                    <div class="col-sm-7">
+                        <select id="batch_ids" class="chosen-select" multiple="" data-placeholder="Select batches" ng-model="student.batch_ids">
+                            <option ng-repeat="batch in batches" value="{{ batch.id }}" ng-selected="student.batch_ids.indexOf(batch.id) > -1">{{ batch.name }}</option>
+                        </select>
+                        <label class="error" for="batch_ids" ng-show="error && error.batch_ids">{{ error.message }}</label>
+                    </div>
+                </div>
+            </div>
+            <div class="row mb15">
+                <div class="form-group col-sm-6">
+                    <label class="col-sm-3 control-label" ng-class="{'has-error': error && error.roll_no}">Add Roll No</label>
+                    <div class="col-sm-7">
+                        <input type="text" id="roll_no" placeholder="Enter roll no" class="form-control" ng-model="student.roll_no" ng-disabled="student.id">
+                        <label class="error" for="roll_no" ng-show="error && error.roll_no">{{ error.message }}</label>
+                    </div>
+                </div>
+            </div>
+        </div><!-- panel-body -->
+        <div class="panel-footer">
+            <div class="col-sm-1">
+                <input type="submit" class="btn btn-primary" value="Save" ng-click="submit()">
+            </div>
+            <div class="col-sm-1">
+                <button class="btn btn-default" ng-click="cancel()">Cancel</button>
+            </div>
+            <div class="col-sm-1">
+                <input type="submit" class="btn btn-primary" value="Add another student" ng-click="submit(true)">
+            </div>
+        </div>
+    </div>
+    </form>
+</div>

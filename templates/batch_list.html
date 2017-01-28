@@ -1,0 +1,105 @@
+<div class="row mb40" ng-show="batches.length > 0">
+    <div class="form-group col-md-3">
+        <label class="col-md-3 filter-label">Days:</label>
+        <div class="col-md-9">
+            <select name="days" class="form-control chosen-select" data-placeholder="Select days" ng-change="filtersChange()" ng-model="filters.days">
+                <option value="0">Any Day</option>
+                <option value="weekdays" ng-selected="'weekdays' == filters.days">Weekdays</option>
+                <option value="weekends" ng-selected="'weekends' == filters.days">Weekends</option>
+            </select>
+        </div>
+    </div>
+    <div class="form-group col-md-3">
+        <label class="col-md-3 filter-label">Type:</label>
+        <div class="col-md-9">
+            <select name="type" class="form-control chosen-select" data-placeholder="Select type" ng-change="filtersChange()" ng-model="filters.type">
+                <option value="0">Any Type</option>
+                <option ng-repeat="(key, value) in Enums.BATCH_TYPE" value="{{ key }}" ng-selected="key == filters.type">{{ value }}</option>
+            </select>
+        </div>
+    </div>
+    <div class="form-group col-md-3">
+        <label class="col-md-5 filter-label">Target Year:</label>
+        <div class="col-md-7">
+            <select name="target_year" class="form-control chosen-select" data-placeholder="Select year" ng-change="filtersChange()" ng-model="filters.target_year">
+                <option value="0">Any Year</option>
+                <option ng-repeat="(key, value) in Enums.TARGET_YEARS" value="{{ key }}" ng-selected="key == filters.target_year">{{ value }}</option>
+            </select>
+        </div>
+    </div>
+    <div class="form-group col-md-3">
+        <label class="col-md-5 filter-label">Branch:</label>
+        <div class="col-md-7">
+            <select name="target_exam" class="form-control chosen-select" data-placeholder="Select branch" ng-change="filtersChange()" ng-model="filters.branch">
+                <option value="0">Any Branch</option>
+                <option ng-repeat="(key, value) in Enums.BATCH_FIELD" value="{{ key }}" ng-selected="key == filters.branch">{{ value }}</option>
+            </select>
+        </div>
+    </div>
+</div >
+
+<div class="row mb10">
+    <a ui-sref="batch"><button class="btn btn-primary btn-lg pull-right">Add Batch</button></a>
+</div>
+
+<div class="row">
+    <!--<div class="tableloader" ng-hide="batches.length > 0">
+        <div class="tableloader-status" style=""><i class="fa fa-spinner fa-spin"></i></div>
+    </div>-->
+    <div ng-show="batches.length > 0">
+        <div class="table-header">Batch Details</div>
+        <div class="table-responsive">
+            <table class="table mb30 table-striped">
+                <thead>
+                <tr>
+                    <!--<th>#</th>-->
+                    <th>Name</th>
+                    <th>Type</th>
+                    <th>Days</th>
+                    <th>Target Year</th>
+                    <th>Target Exams</th>
+                    <th></th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="batch in batches" data-id="{{ batch.id }}">
+                    <!--<td>{{ $index+1 }}</td>-->
+                    <td>{{ batch.name }}</td>
+                    <td ng-if="batch.type != '4'">{{ Enums.BATCH_TYPE[batch.type] }}</td>
+                    <td ng-if="batch.type == '4'">{{ batch.other }}</td>
+                    <td>{{ batch.on_weekdays ? 'Weekdays' : ''}}{{ batch.on_weekdays && batch.on_weekends ? ',' : '' }}{{ batch.on_weekends ? 'Weekends' : '' }}</td>
+                    <td>{{ batch.target_year }}</td>
+                    <td>{{ Enums.TARGET_EXAMS[batch.target_exam] }}</td>
+                    <td class="table-action">
+                        <a ui-sref="batch({id: batch.id})"><button class="btn btn-warning">Edit</button></a>
+                    </td>
+                    <td class="table-action" ng-show="batch.status == 1">
+                        <button class="btn btn-danger" ng-click="deactivate(batch.id)">Deactivate</button>
+                    </td>
+                    <td class="table-action" ng-show="batch.status == 0">
+                        <button class="btn btn-danger" ng-click="activate(batch.id)">Activate</button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div><!-- table-responsive -->
+    </div>
+    <div ng-show="batches.length == 0">
+        <div class="table-header text-center">No batches to show</div>
+    </div>
+</div>
+
+<div class="modal fade" id="deactivateModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title" id="myModalLabel">Batch has students</h4>
+            </div>
+            <div class="modal-body" style="font-size: 15px;">
+                {{ deactivateBatchMessage }}
+            </div>
+        </div><!-- modal-content -->
+    </div><!-- modal-dialog -->
+</div>

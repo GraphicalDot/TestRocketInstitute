@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="lovesh">
+    <link rel="shortcut icon" href="assets/images/mocktest-listing-rocket-bg1.png" type="image/png">
+
+    <title>Test App</title>
+
+
+
+    <style>
+        button.page-sections {
+            font-size: large !important;
+            font-weight: 900 !important;
+            padding: 12px 23px !important;
+            line-height: 24px !important;
+        }
+    </style>
+
+</head>
+
+<body>
+
+<!-- Preloader -->
+<div id="preloader">
+    <div id="status"><i class="fa fa-spinner fa-spin"></i></div>
+</div>
+
+<section ng-controller="MainCtrl">
+
+    <div class="headerbar" ng-hide="testRunning" style="height: 61px;">
+
+        <div class="logopanel pull-left" style="margin-left: 50px;">
+            <img src="assets/images/logo.png" width="200px"/>
+        </div>
+        <div class="pull-left">
+            <ul class="headermenu" style="height: 100%;">
+                <li style="height: 61px;" class="header-menu-item">
+                    <div class="btn-group" style="height: 100%;">
+                        <button type="button" class="btn btn-default dropdown-toggle page-sections"
+                                ng-class="{'selected-header-menu-item': state.current.name == 'institute_analysis'}"
+                                ng-click="state.transitionTo('institute_analysis');" style="height: 100%;">
+                            ANALYSIS
+                        </button>
+                    </div>
+                </li>
+                <li class="header-menu-item" style="height: 61px;">
+                    <div class="btn-group" style="height: 100%;">
+                        <button type="button" class="btn btn-default dropdown-toggle page-sections"
+                                ng-class="{'selected-header-menu-item': ['batches', 'batch'].indexOf(state.current.name) > -1}"
+                                ng-click="state.transitionTo('batches');" style="height: 100%;">
+                            BATCHES
+                        </button>
+                    </div>
+                </li>
+                <li class="header-menu-item" style="height: 61px;">
+                    <div class="btn-group" style="height: 100%;">
+                        <button type="button" class="btn btn-default dropdown-toggle page-sections"
+                                ng-class="{'selected-header-menu-item': ['students', 'student', 'student_profile'].indexOf(state.current.name) > -1}"
+                                ng-click="state.transitionTo('students');" style="height: 100%;">
+                            STUDENTS
+                        </button>
+                    </div>
+                </li>
+                <li class="header-menu-item" style="height: 61px;">
+                    <div class="btn-group" style="height: 100%;">
+                        <button type="button" class="btn btn-default dropdown-toggle page-sections"
+                                ng-class="{'selected-header-menu-item': ['mock_tests', 'mock_test'].indexOf(state.current.name) > -1}"
+                                ng-click="state.transitionTo('mock_tests');" style="height: 100%;">
+                            MOCK TESTS
+                        </button>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <div class="header-right" style="height: 100%;">
+            <ul class="headermenu" style="height: 61px">
+                <li class="pull-right header-menu-item" style="height: 100%;">
+                    <div class="btn-group" style="height: 100%;">
+                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
+                                style="height: 100%;">
+                            {{user.name}}
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-usermenu pull-right">
+                            <!--<li><a href="#"><i class="glyphicon glyphicon-question-sign"></i> Help</a></li>-->
+                            <li><a href="#" ng-click="logout()"><i class="glyphicon glyphicon-log-out"></i> Log Out</a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <!-- header-right -->
+
+    </div>
+
+    <div class="mainpanel">
+
+        <div class="contentpanel">
+            <div ui-view></div>
+        </div>
+        <!-- contentpanel -->
+
+    </div>
+    <!-- mainpanel -->
+
+
+</section>
+
+<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+<!--[if lt IE 9]>
+<script src="js/libs/html5shiv.js"></script>
+<script src="js/libs/respond.min.js"></script>
+<![endif]-->
+
+<script data-main="js/main.js" src="js/libs/require.js"></script>
+</body>
+</html>

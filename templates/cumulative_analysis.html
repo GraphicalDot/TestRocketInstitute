@@ -1,0 +1,323 @@
+<div class="row" ng-show="attemptedMockTests && selectedMockTestId == 0">
+    <div class="col-md-6">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="panel panel-primary">
+                    <div class="panel-heading analysis-panel-heading">
+                        <h1 class="analysis-panel-title">Test v/s Test Chart</h1>
+                        <p class="lead">
+                            Are you improving? See how's your performance changing from one test to another. Compare your 
+                            performance in each subject in different tests you have taken so far.
+                        </p>
+                        <p class="lead">
+                            For optimum results give two mock tests of the same exam. You can also filter on 
+                            basis of Mock Test and Exam Type.
+                        </p>
+                    </div>
+                    <div class="panel-body panel-body-test-vs-test-graph">
+
+                        <div class="form-group form-inline">
+                            <select class="form-control mb15 chosen-select" name="testType" id="testType" ng-model="selectedType" ng-change="filtersChanged()">
+                                <option value="-1" selected>All Test Types</option>
+                                <option ng-repeat="mockTestType in mockTestTypes" value="{{mockTestType.id}}">{{mockTestType.name}}</option>
+                            </select>
+                            <select class="form-control mb15 chosen-select" name="examName" id="examName" ng-model="selectedExam" ng-change="filtersChanged()">
+                                <option value="-1">All Exams</option>
+                                <option ng-repeat="studentTargetExam in studentTargetExams" value="{{studentTargetExam.id}}">
+                                    {{studentTargetExam.name}}
+                                </option>
+                            </select>
+                        </div>
+                        
+                        <highchart id="chart1" config="chart1Config" style="height: 600px;" ng-show="chart1Config.xAxis.categories.length > 0"></highchart>
+                        <div class="row no-data-test-vs-test-msg" ng-show="chart1Config.xAxis.categories.length == 0">
+                            <h3 style="text-align:center">No attempted tests for these filters. Attempt more tests!</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+
+        <div class="panel panel-primary">
+
+        <div class="panel-heading analysis-panel-heading">
+            <h1 class="analysis-panel-title">Overall Performance Matrix</h1>
+            <p class="lead">
+               To perform well in an exam you need to be quick and accurate in solving problems. This matrix tells you what kind 
+               of test taking temperament you have got. Your overall speed and accuracy in attempting questions is measured in 
+               various tests. You should try to be in the top right quadrant i.e. "High Speed High Accuracy" Quadrant.
+            </p>
+            <p class="lead">
+                This is a dynamic chart and you can expect it to change for every mock test you take.
+            </p>
+        </div>
+
+        <div class="panel-body">
+
+        <div class="row" style="height:600px;background-color:#FCFCFC;font-size: 12px;">
+            <!--<canvas id="speed_accuracy" width="600" height="600" style="border:1px solid #d3d3d3;background-color: white;" />-->
+            <div class="quadrant" ng-attr-style="width:{{optimumAccuracy}}%;border-right:1px dashed black;border-bottom:1px dashed black;float: left; border-left: 3px solid black;" id="top-left">
+                <p style="position:absolute;left:10%;top:10%;color:blue;width: 100px;display: inline-block;">
+                    High Speed Low Accuracy
+                </p> <!-- High Speed Low Accuracy -->
+                <p style="position:absolute;left: 10%;top: 94%;display: inline-block;">
+                    Line of optimum speed
+                </p> <!-- Line of optimum speed -->
+            </div> <!-- quadrant -->
+            <div class="quadrant" ng-attr-style="width:{{100-optimumAccuracy}}%;border-bottom:1px dashed black;float: right;" id="top-right">
+                <p style="position:absolute;left:75%;top:10%;color:green;width: 100px;display: inline-block;">
+                    High Speed High Accuracy
+                </p> <!-- High Speed High Accuracy -->
+            </div> <!-- quadrant -->
+            <div style="clear:both;"></div>
+            <div class="quadrant" ng-attr-style="width:{{optimumAccuracy}}%;border-right:1px dashed black;float: left;border-left: 3px solid black; border-bottom: 3px solid black;" id="bottom-left">
+                <p style="position:absolute;left: 83%;top: 60%;display: inline-block;width: 167px;">
+                    Line of optimum accuracy
+                </p> <!-- Line of optimum accuracy -->
+                <p style="position:absolute;left:10%;top:85%;color:red;width: 100px;display: inline-block;">
+                <p style="position:absolute;left:10%;top:85%;color:red;width: 100px;display: inline-block;">
+                <p style="position:absolute;left:10%;top:85%;color:red;width: 100px;display: inline-block;">
+                Low Speed Low Accuracy
+            </p> <!-- Low Speed Low Accur</div> <!-- quadrant -->
+            </div>
+            <div class="quadrant" ng-attr-style="width:{{100-optimumAccuracy}}%;float: right;border-bottom: 3px solid black;" id="bottom-right">
+                <p style="position:absolute;left:75%;top:85%;color:blue;width: 100px;display: inline-block;">
+                    Low Speed High Accuracy
+                </p> <!-- Low Speed High Accuracy -->
+            </div> <!-- quadrant -->
+            <div style="clear:both;"></div> <!-- clearfix div -->
+        </div> <!-- main parent matrix div -->
+
+        </div>
+
+        </div>
+
+    </div>
+</div>
+
+<div class="row" ng-show="attemptedMockTests && selectedMockTestId == 0" ng-repeat="(subjectId, data) in analysis.subjects">
+    <div class="panel panel-primary subject-analysis">
+        <div class="panel-heading {{ getSubjectClassName(data.name) }}">
+            <div class="row">
+                <div class="col-md-3">
+                    <h1 class="analysis-panel-title">{{ data.name }}</h1>
+                </div> <!-- col-md-3 -->
+                <!--<div class="col-md-2 col-md-offset-7">
+                    <button class="btn btn-darkblue view-question-analysis-button" ng-click="scrollToSubject(subjectId)">View Questions</button>
+                </div>--> <!-- col-md-2 -->
+            </div> <!-- row -->
+            <div class="mb20"></div>
+            <div class="row">
+                <div class="col-md-2">
+                    <small class="subject-analysis-label">Attempted</small>
+                    <h4>{{ data.correct.length + data.incorrect.length }} / {{ data.correct.length + data.incorrect.length + data.not_attempted.length }}</h4>
+                </div> <!-- col-md-2 -->
+                <div class="col-md-2">
+                    <small class="subject-analysis-label">Correct</small>
+                    <h4>{{ data.correct.length }}</h4>
+                </div> <!-- col-md-2 -->
+                <div class="col-md-2">
+                    <small class="subject-analysis-label">Wrong</small>
+                    <h4>{{ data.incorrect.length }}</h4>
+                </div> <!-- col-md-2 -->
+                <div class="col-md-2">
+                    <small class="subject-analysis-label">Accuracy</small>
+                    <h4>{{ data.accuracy }}%</h4>
+                </div> <!-- col-md-2 -->
+                <div class="col-md-2">
+                    <small class="subject-analysis-label">Score</small>
+                    <h4>{{ data.marks.toFixed(1) }}</h4>
+                </div> <!-- col-md-2 -->
+            </div> <!-- row -->
+        </div> <!-- panel-heading -->
+        <div class="panel-body subject-analysis">
+            <div class="row" ng-repeat="chunk in data.topic_ids | partition:4">
+                <div class="row">
+                    <div class="col-md-3" ng-repeat="topic_id in chunk">
+                        <div class="panel panel-stat" style="cursor: pointer;" ng-click="showTopicQuestions(topic_id)" ng-class="{'panel-primary': topic_id != shownTopic, 'panel-success': topic_id == shownTopic}">
+                            <div class="panel-heading">
+                                <div class="stat">
+                                    <div class="row">
+                                        <div class="col-md-12" style="min-height: 52px;">
+                                            <h3>{{ analysis.topics[topic_id].name }}</h3>
+                                        </div> <!-- col-md-12 -->
+                                    </div> <!-- row -->
+                                    <div class="mb10"></div>
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <small class="stat-label subject-analysis-topic-label">Correct</small>
+                                            <h4>{{ analysis.topics[topic_id].correct.length }}</h4>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <small class="stat-label subject-analysis-topic-label">Incorrect</small>
+                                            <h4>{{ analysis.topics[topic_id].incorrect.length }}</h4>
+                                        </div>
+                                        <div class="col-md-5">
+                                            <small class="stat-label subject-analysis-topic-label">Not Attempted</small>
+                                            <h4>{{ analysis.topics[topic_id].not_attempted.length }}</h4>
+                                        </div>
+                                    </div> <!-- row -->
+                                </div> <!-- stat -->
+                            </div> <!-- panel-heading -->
+                        </div> <!-- panel panel-primary panel-stat -->
+                    </div> <!-- col-md-3 -->
+                </div> <!-- row -->
+                <div class="row" style="padding-left: 25px;">
+                    <div class="col-sm-6 col-md-12" ng-repeat="topic_id in chunk" ng-show="shownTopic == topic_id">
+                        <div class="panel indivual-ques-analysis-view" data-id="{{ tpl[0] }}" ng-repeat="tpl in [].concat(analysis.topics[topic_id].correct_t, analysis.topics[topic_id].incorrect_t, analysis.topics[topic_id].not_attempted_t)"
+                             ng-class="{'panel-primary': data.perfect_attempts[tpl[1]].indexOf(tpl[0]) == -1 && data.overtime_attempts[tpl[1]].indexOf(tpl[0]) == -1 && data.wasted_attempts[tpl[1]].indexOf(tpl[0]) == -1 && data.completely_wasted_attempts[tpl[1]].indexOf(tpl[0]) == -1,
+                                     'panel-success': data.perfect_attempts[tpl[1]].indexOf(tpl[0]) > -1 || data.overtime_attempts[tpl[1]].indexOf(tpl[0]) > -1,
+                                     'panel-danger': data.wasted_attempts[tpl[1]].indexOf(tpl[0]) > -1 || data.completely_wasted_attempts[tpl[1]].indexOf(tpl[0]) > -1}">
+                            <div class="panel-heading" style="color: white;">
+                                <div class="row">
+                                    <div class="col-md-1">
+                                        <h4 class="question-analysis-ques-number">{{ $index+1 }}</h4>
+                                    </div> <!-- col-md-1 -->
+                                    <div class="col-md-2">
+                                        <small class="question-analysis-attribute-label">Difficulty</small>
+                                        <h5>{{ questionsResponse[tpl[0]].difficulty }} / 5</h5>
+                                    </div> <!-- col-md-2 -->
+                                    <div class="col-md-2">
+                                        <small class="question-analysis-attribute-label">Type</small>
+                                        <h5>{{ Enums.QUESTION_NATURE[questionsResponse[tpl[0]].nature] }}</h5>
+                                    </div> <!-- col-md-2 -->
+                                    <div class="col-md-2">
+                                        <small class="question-analysis-attribute-label">Ideal Time</small>
+                                        <h5>{{ questionsResponse[tpl[0]].average_time }} seconds</h5>
+                                    </div> <!-- col-md-2 -->
+                                    <div class="col-md-2">
+                                        <small class="question-analysis-attribute-label">Your Time</small>
+                                        <h5>{{ answers[tpl[1]][tpl[0]].time | number:0 }} seconds</h5>
+                                    </div> <!-- col-md-2 -->
+                                    <div class="col-md-2" ng-if="data.perfect_attempts[tpl[1]].indexOf(tpl[0]) > -1">
+                                        <small class="question-analysis-attribute-label">Attempt Type</small>
+                                        <h5>Perfect Attempt</h5>
+                                    </div> <!-- col-md-2 -->
+                                    <div class="col-md-2" ng-if="data.wasted_attempts[tpl[1]].indexOf(tpl[0]) > -1">
+                                        <small class="question-analysis-attribute-label">Attempt Type</small>
+                                        <h5>Wasted Attempt</h5>
+                                    </div> <!-- col-md-2 -->
+                                    <div class="col-md-2" ng-if="data.overtime_attempts[tpl[1]].indexOf(tpl[0]) > -1">
+                                        <small class="question-analysis-attribute-label">Attempt Type</small>
+                                        <h5>Overtime Attempt</h5>
+                                    </div> <!-- col-md-2 -->
+                                    <div class="col-md-2" ng-if="data.completely_wasted_attempts[tpl[1]].indexOf(tpl[0]) > -1">
+                                        <small class="question-analysis-attribute-label">Attempt Type</small>
+                                        <h5>Completely Wasted Attempt</h5>
+                                    </div> <!-- col-md-2 -->
+                                </div> <!-- row -->
+                            </div> <!-- panel-heading -->
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-md-4 col-md-offset-8">
+                                        <div class="solution-concept-ques-analysis-buttons">
+                                            <button class="btn btn-warning" ng-show="[questionsResponse[tpl[0]].status.proof_read_text_solution, questionsResponse[tpl[0]].status.proof_read_video_solution].indexOf('1') > -1" ng-click="showSolution(tpl[0])">View Solution</button>
+                                            <button class="btn btn-warning" ng-show="ontology[questionsResponse[tpl[0]].ontology[questionsResponse[tpl[0]].ontology.length-1]].theory" ng-click="showConcept(tpl[0])">View Key Concept</button>
+                                        </div> <!-- solution-concept-ques-analysis-buttons -->
+                                    </div> <!-- col-md-4 col-md-offset-8 -->
+                                </div> <!-- row -->
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="media-body">
+                                            <h4 class="filename" data-id="{{ questionsResponse[tpl[0]].id }}" ng-bind-html="sce.trustAsHtml(questionsResponse[tpl[0]].content)"></h4>
+                                            <ul class="question-options-list">
+                                                <li class="content question-options question-answer-option" ng-repeat="option in questionsResponse[tpl[0]].all_options track by $index">
+                                                    <div class="opt-container" ng-class="{'correct-opt-container': questionsResponse[tpl[0]].correct_options.indexOf($index) > -1, 'incorrect-opt-container': answers[tpl[1]][tpl[0]].options.indexOf($index) > -1 && questionsResponse[tpl[0]].correct_options.indexOf($index) == -1}">
+                                                        <span class="top-option-label answer-option-label" ng-class="{'correct': questionsResponse[tpl[0]].correct_options.indexOf($index) > -1, 'incorrect': answers[tpl[1]][tpl[0]].options.indexOf($index) > -1 && questionsResponse[tpl[0]].correct_options.indexOf($index) == -1, 'not_attempted': answers[tpl[1]][tpl[0]].options.indexOf($index) == -1 && questionsResponse[tpl[0]].correct_options.indexOf($index) == -1}">{{ letterAt($index) }}</span>
+                                                        <div class="question-answer-text" ng-bind-html="sce.trustAsHtml(option)"></div> <!-- question-answer-text -->
+                                                <span class="bottom-option-label correct question-correct-wrong-label" ng-if="questionsResponse[tpl[0]].correct_options.indexOf($index) > -1 && answers[tpl[1]][tpl[0]].options.indexOf($index) == -1">
+                                                     <span class="glyphicon glyphicon-ok"></span> Correct Answer
+                                                </span> <!-- bottom-option-label correct question-correct-wrong-label -->
+                                                <span class="bottom-option-label correct question-correct-wrong-label" ng-if="questionsResponse[tpl[0]].correct_options.indexOf($index) > -1 && answers[tpl[1]][tpl[0]].options.indexOf($index) > -1">
+                                                    <span class="glyphicon glyphicon-ok"></span> Your Answer
+                                                </span>
+                                                <span class="bottom-option-label incorrect question-correct-wrong-label" ng-if="questionsResponse[tpl[0]].correct_options.indexOf($index) == -1 && answers[tpl[1]][tpl[0]].options.indexOf($index) > -1">
+                                                    <span class="glyphicon glyphicon-remove"></span> Your Answer
+                                                </span> <!-- bottom-option-label incorrect questionc-correct-wrong-label -->
+                                                    </div> <!-- opt-container correct-opt-container -->
+                                                </li> <!-- content question-options question-answer-option -->
+
+                                            </ul> <!-- question-options-list -->
+                                        </div> <!-- media-body -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> <!-- panel-body -->
+    </div> <!-- panel panel-primary -->
+</div>
+
+<div class="modal fade" id="conceptModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title">Key Concept</h4>
+            </div>
+            <div class="modal-body" ng-bind-html="questionTheory" style="font-size: 15px;">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" ng-show="[questionsResponse[modalQuestionId].status.proof_read_text_solution, questionsResponse[modalQuestionId].status.proof_read_video_solution].indexOf('1') > -1" ng-click="switchToSolution(modalQuestionId)">View Solution</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Back to analysis</button>
+            </div>
+        </div><!-- modal-content -->
+    </div><!-- modal-dialog -->
+</div>
+
+<div class="modal fade" id="solutionModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title">View Solution</h4>
+            </div>
+            <div class="modal-body" style="font-size: 15px;">
+                <div class="media-body" style="background: white;">
+                    <div>
+                        <h4><strong>QUESTION</strong></h4>
+                        <h4 class="filename" data-id="{{ questionsResponse[modalQuestionId].id }}" ng-bind-html="sce.trustAsHtml(questionsResponse[modalQuestionId].content)"></h4>
+                        <ul style="list-style: none;padding: 0px;border-bottom: 1px solid #dedede;">
+                            <li class="content question-options" ng-repeat="option in questionsResponse[modalQuestionId].correct_options track by $index" style="padding: 0 !important;position: relative;">
+                                <div class="opt-container correct-opt-container">
+                                    <div class="" style="margin-top: 20px;min-height: 45px;margin-left: 45px;" ng-bind-html="sce.trustAsHtml(questionsResponse[modalQuestionId].all_options[option])">
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <div ng-show="questionsResponse[modalQuestionId].status.proof_read_text_solution == '1'">
+                        <h4><strong>TEXT SOLUTION</strong></h4>
+                        <h4 ng-bind-html="sce.trustAsHtml(questionsResponse[modalQuestionId].text_solution)"></h4>
+                    </div>
+                    <div ng-show="questionsResponse[modalQuestionId].status.proof_read_video_solution == '1'">
+                        <h4><strong>VIDEO SOLUTION</strong></h4>
+                        <youtube-video video-url="questionsResponse[modalQuestionId].video_solution_url" player="solutionPlayer"></youtube-video>
+                    </div>
+                </div>
+            </div>
+        </div><!-- modal-content -->
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal" ng-show="ontology[questionsResponse[modalQuestionId].ontology[questionsResponse[modalQuestionId].ontology.length-1]].theory" ng-click="switchToConcept(modalQuestionId)">View Concept</button>
+            <button type="button" class="btn btn-primary" data-dismiss="modal">Back to analysis</button>
+        </div>
+    </div><!-- modal-dialog -->
+</div>
+
+<div ng-hide="attemptedMockTests && selectedMockTestId == 0" class="row" style="padding-left: 20px;padding-right: 44px;">
+    <div class="row">
+
+        <div class="col-md-4 col-md-offset-4">
+            <div class="cumulative-analysis-unlaunched-rocket"></div>
+        </div>
+
+        <div class="col-md-12">
+            <h2 style="text-align: center;">You haven't taken off yet! Start attempting tests to see a detailed analysis on this page.</h2>
+        </div>
+
+    </div>
+</div>

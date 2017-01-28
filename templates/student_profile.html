@@ -1,0 +1,117 @@
+<div class="row">
+    <button class="btn btn-primary pull-left mb10" ng-click="backToList()">Back to list</button>
+</div>
+<div class="row">
+    <ul class="nav nav-tabs nav-justified">
+        <li class="active"><a href="#profile" data-toggle="tab"><strong>Profile</strong></a></li>
+        <li><a href="#analysis" data-toggle="tab"><strong>Analysis</strong></a></li>
+    </ul>
+    <div class="tab-content">
+        <div class="tab-pane active" id="profile">
+            <div class="form-group">
+                <label class="col-sm-3 control-label">Name</label>
+                <div class="col-sm-5">
+                    {{ student.name }}
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">Batches</label>
+                <div class="col-sm-5">
+                    {{ student.batch_str }}
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">Mock Tests Attempted</label>
+                <div class="col-sm-8">
+                    <span class="label label-success col-sm-2" style="margin-right: 5px;" ng-repeat="mockTest in student.mock_tests" ng-if="mockTest.attempted">{{ mockTest.name }}</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">Mock Tests Not Attempted</label>
+                <div class="col-sm-8">
+                    <span class="label label-warning col-sm-2" style="margin-right: 5px;" ng-repeat="mockTest in student.mock_tests" ng-if="!mockTest.attempted">{{ mockTest.name }}</span>
+                </div>
+            </div>
+            <div class="form-group" ng-show="student.city">
+                <label class="col-sm-3 control-label">City</label>
+                <div class="col-sm-5">
+                    {{ student.city }}
+                </div>
+            </div>
+            <div class="form-group" ng-show="student.area">
+                <label class="col-sm-3 control-label">Area</label>
+                <div class="col-sm-5">
+                    {{ student.area }}
+                </div>
+            </div>
+            <div class="form-group" ng-show="student.pin">
+                <label class="col-sm-3 control-label">Pin</label>
+                <div class="col-sm-5">
+                    {{ student.pin }}
+                </div>
+            </div>
+            <div class="form-group" ng-show="student.mobile_no">
+                <label class="col-sm-3 control-label">Mobile no</label>
+                <div class="col-sm-5">
+                    {{ student.mobile_no }}
+                </div>
+            </div>
+            <div class="form-group" ng-show="student.email">
+                <label class="col-sm-3 control-label">Email</label>
+                <div class="col-sm-5">
+                    {{ student.email }}
+                </div>
+            </div>
+            <div class="form-group" ng-show="student.school">
+                <label class="col-sm-3 control-label">School</label>
+                <div class="col-sm-5">
+                    {{ student.school }}
+                </div>
+            </div>
+            <div class="form-group" ng-show="student.ntse_score">
+                <label class="col-sm-3 control-label">NTSE Score</label>
+                <div class="col-sm-5">
+                    {{ student.ntse_score }}
+                </div>
+            </div>
+            <div class="form-group" ng-show="student.roll_no">
+                <label class="col-sm-3 control-label">Roll No</label>
+                <div class="col-sm-5">
+                    {{ student.roll_no }}
+                </div>
+            </div>
+            <div class="form-group" ng-show="student.father_name">
+                <label class="col-sm-3 control-label">Father Name</label>
+                <div class="col-sm-5">
+                    {{ student.father_name }}
+                </div>
+            </div>
+            <div class="form-group" ng-show="student.father_mobile_no">
+                <label class="col-sm-3 control-label">Father's Mobile No</label>
+                <div class="col-sm-5">
+                    {{ student.father_mobile_no }}
+                </div>
+            </div>
+            <div class="form-group" ng-show="student.father_email">
+                <label class="col-sm-3 control-label">Father's Email</label>
+                <div class="col-sm-5">
+                    {{ student.father_email }}
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane" id="analysis">
+            <div class="row form-group form-inline" ng-show="attemptedMockTests">
+                <select class="form-control mb15 chosen-select" name="mock-tests" id="mock-tests" ng-model="selectedMockTestId" ng-change="mockTestChanged()">
+                    <option value="0" selected="selected">Cumulative Analysis</option>
+                    <option ng-repeat="(attemptId, data) in attemptedMockTests" value="{{ attemptId }}">{{ mockTests[data.mock_test_id].name }}</option>
+                </select>
+            </div>
+            <div ng-show="selectedMockTestId == 0">
+                <ng-include src="'./templates/cumulative_analysis.html'"></ng-include>
+            </div>
+            <div ng-repeat="(attemptId, data) in attemptedMockTests" ng-show="selectedMockTestId == attemptId">
+                <ng-include src="'./templates/mock_test_main_analysis.html'"></ng-include>
+            </div>
+        </div>
+    </div>
+</div>

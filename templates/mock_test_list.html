@@ -1,0 +1,58 @@
+<div class="row mb40">
+    <div class="form-group col-md-3">
+        <label class="col-md-4 filter-label">Difficulty</label>
+        <div class="col-md-8">
+            <select name="difficulty" class="form-control chosen chosen-select" data-placeholder="Select difficulty" ng-change="filtersChange()" ng-model="filters.difficulty">
+                <option value="0">Any difficulty</option>
+                <option ng-repeat="(key, value) in Enums.MOCK_TEST_DIFFICULTY_LEVEL" value="{{ key }}" ng-selected="key == filters.difficulty">{{ value }}</option>
+            </select>
+        </div>
+    </div>
+    <div class="form-group col-md-6">
+        <label class="col-md-4 filter-label">Batches Pushed To</label>
+        <div class="col-md-8">
+            <select name="batch_id" class="form-control chosen multiple chosen-select" multiple="" data-placeholder="Any batch" ng-change="filtersChange()" ng-model="filters.batches_pushed_to">
+                <!--<option value="0">Any Batch</option>-->
+                <option ng-repeat="batch in batches" value="{{ batch.id }}" ng-selected="filters.batches_pushed_to.indexOf(batch.id) > -1">{{ batch.name }}</option>
+            </select>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div ng-show="mock_tests.length > 0">
+        <div class="table-header">Mock Test Details</div>
+        <div class="table-responsive">
+            <table class="table mb30 table-striped">
+                <thead>
+                <tr>
+                    <!--<th>#</th>-->
+                    <th>Name</th>
+                    <th>Target Exam</th>
+                    <th>Difficulty level</th>
+                    <th>Batches pushed to</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="mock_test in mock_tests" data-id="{{ mock_test.id }}">
+                    <!--<td>{{ $index+1 }}</td>-->
+                    <td>{{ mock_test.name }}</td>
+                    <td>{{ Enums.TARGET_EXAMS[mock_test.target_exam] }}</td>
+                    <td>{{ Enums.MOCK_TEST_DIFFICULTY_LEVEL[mock_test.difficulty] }}</td>
+                    <td>{{ mock_test.batches_str }}</td>
+                    <td class="table-action">
+                        <a ui-sref="mock_test({id: mock_test.id, target_exam: mock_test.target_exam})"><button class="btn btn-primary">Push</button></a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div><!-- table-responsive -->
+        <div class="row text-center">
+            <ng-include src="'./templates/pagination.html'"></ng-include>
+        </div>
+    </div>
+    <div ng-show="mock_tests.length == 0">
+        <div class="table-header text-center">No mock tests available</div>
+    </div>
+</div>

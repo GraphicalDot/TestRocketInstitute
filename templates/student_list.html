@@ -1,0 +1,96 @@
+<div class="row mb40" ng-hide="batches.length == 0 && noFilters">
+    <div class="form-group col-md-3">
+        <label class="col-md-3 filter-label">Batch:</label>
+        <div class="col-md-9">
+            <select name="batch_id" class="form-control chosen-select" data-placeholder="Select batch" ng-change="filtersChange()" ng-model="filters.batch_id">
+                <option value="0">Any Batch</option>
+                <option ng-repeat="batch in batches" value="{{ batch.id }}" ng-selected="batch.id == filters.batch_id">{{ batch.name }}</option>
+            </select>
+        </div>
+    </div>
+    <div class="form-group col-md-3">
+        <label class="col-md-3 filter-label">Type:</label>
+        <div class="col-md-9">
+            <select name="batch_type" class="form-control chosen chosen-select" data-placeholder="Select type" ng-change="filtersChange()" ng-model="filters.batch_type">
+                <option value="0">Any Type</option>
+                <option ng-repeat="(key, value) in Enums.BATCH_TYPE" value="{{ key }}" ng-selected="key == filters.batch_type">{{ value }}</option>
+            </select>
+        </div>
+    </div>
+    <div class="form-group col-md-3">
+        <label class="col-md-5 filter-label">Target Year:</label>
+        <div class="col-md-7">
+            <select name="target_year" class="form-control chosen chosen-select" data-placeholder="Select year" ng-change="filtersChange()" ng-model="filters.target_year">
+                <option value="0">Any Year</option>
+                <option ng-repeat="(key, value) in Enums.TARGET_YEARS" value="{{ key }}" ng-selected="key == filters.target_year">{{ value }}</option>
+            </select>
+        </div>
+    </div>
+    <div class="form-group col-md-3">
+        <label class="col-md-5 filter-label">Branches:</label>
+        <div class="col-md-7">
+            <select name="target_exam" class="form-control chosen multiple chosen-select" data-placeholder="Any branch" multiple="" ng-change="filtersChange()" ng-model="filters.branches">
+                <option value="0">Any Branch</option>
+                <option ng-repeat="(key, value) in Enums.BATCH_FIELD" value="{{ key }}" ng-selected="filters.branches.indexOf(key) > -1">{{ value }}</option>
+            </select>
+        </div>
+    </div>
+</div>
+
+<div class="row mb10" ng-hide="batches.length == 0">
+    <div class="col-sm-3" ng-hide="students.length == 0 && (!filters.query || filters.query == '')">
+        <input type="search" placeholder="Search by name" class="form-control" ng-model="filters.query" ng-keypress="search($event)">
+    </div>
+    <div class="col-sm-1" ng-hide="students.length == 0 && (!filters.query || filters.query == '')" style="margin-top: 3px;">
+        <button class="btn btn-info" ng-click="filtersChange()" ng-disabled="!(filters.query && filters.query != '')">Search</button>
+    </div>
+    <div class="col-sm-1" ng-hide="students.length == 0 && (!filters.query || filters.query == '')" style="margin-top: 3px;">
+        <button class="btn btn-warning" ng-click="filters.query='';filtersChange();" ng-disabled="!(filters.query && filters.query != '')">Clear</button>
+    </div>
+    <a ui-sref="student" class="pull-right"><button class="btn btn-primary btn-lg">Add Student</button></a>
+</div>
+
+<div class="row">
+    <div ng-show="students.length > 0">
+        <div class="table-header">Student Details</div>
+        <div class="table-responsive">
+            <table class="table mb30 table-striped">
+                <thead>
+                <tr>
+                    <!--<th>Roll No.</th>-->
+                    <th>Name</th>
+                    <th>Batch</th>
+                    <th>Target Year</th>
+                    <th>Target Exams</th>
+                    <th></th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="student in students" data-id="{{ student.id }}">
+                    <!--<td>{{ student.roll_no }}</td>-->
+                    <td>{{ student.name }}</td>
+                    <td>{{ student.batches_str }}</td>
+                    <td>{{ student.target_year }}</td>
+                    <td>{{ student.target_exams_str }}</td>
+                    <td class="table-action">
+                        <a ui-sref="student({id: student.id})"><button class="btn btn-warning">Edit</button></a>
+                    </td>
+                    <td class="table-action">
+                        <a ui-sref="student_profile({id: student.id})"><button class="btn btn-primary">View Profile</button></a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div><!-- table-responsive -->
+        <div class="row text-center">
+            <ng-include src="'./templates/pagination.html'"></ng-include>
+        </div>
+    </div>
+    <div ng-show="students.length == 0">
+        <div class="table-header text-center">No students to show</div>
+    </div>
+    <div ng-show="batches.length == 0 && noFilters">
+        <div class="table-header text-center">Create a Batch to Add Students</div>
+    </div>
+</div>

@@ -1,0 +1,31 @@
+<ul class="pagination">
+    <li ng-class="{'disabled': filters.page == 1}"><a href="#" ng-click="goToPage($event, 1)"><i class="fa fa-angle-left"></i><i class="fa fa-angle-left"></i></a></li>
+    <li ng-class="{'disabled': filters.page == 1}"><a href="#" ng-click="goToPage($event, filters.page - 1)"><i class="fa fa-angle-left"></i></a></li>
+    <li ng-if="(filters.page - 4) > 0">
+        <a href="#" ng-click="goToPage($event, filters.page - 4)">{{ filters.page - 4 }}</a>
+    </li>
+    <li ng-if="(filters.page - 3) > 0">
+        <a href="#" ng-click="goToPage($event, filters.page - 3)">{{ filters.page - 4 }}</a>
+    </li>
+    <li ng-if="(filters.page - 2) > 0">
+        <a href="#" ng-click="goToPage($event, filters.page - 2)">{{ filters.page - 2 }}</a>
+    </li>
+    <li ng-if="(filters.page - 1) > 0">
+        <a href="#" ng-click="goToPage($event, filters.page - 1)">{{ filters.page - 1 }}</a>
+    </li>
+    <li class="active"><a href="#">{{ filters.page }}</a></li>
+    <li ng-if="(filters.page + 1) <= totalPages">
+        <a href="#" ng-click="goToPage($event, filters.page + 1)">{{ filters.page + 1 }}</a>
+    </li>
+    <li ng-if="(filters.page + 2) <= totalPages">
+        <a href="#" ng-click="goToPage($event, filters.page + 2)">{{ filters.page + 2 }}</a>
+    </li>
+    <li ng-if="(filters.page + 3) <= totalPages">
+        <a href="#" ng-click="goToPage($event, filters.page + 3)">{{ filters.page + 3 }}</a>
+    </li>
+    <li ng-if="(filters.page + 4) <= totalPages">
+        <a href="#" ng-click="goToPage($event, filters.page + 4)">{{ filters.page + 4 }}</a>
+    </li>
+    <li ng-class="{'disabled': filters.page == totalPages}"><a href="#" ng-click="goToPage($event, filters.page + 1)"><i class="fa fa-angle-right"></i></a></li>
+    <li ng-class="{'disabled': filters.page == totalPages}"><a href="#" ng-click="goToPage($event, totalPages)"><i class="fa fa-angle-right"></i><i class="fa fa-angle-right"></i></a></li>
+</ul>

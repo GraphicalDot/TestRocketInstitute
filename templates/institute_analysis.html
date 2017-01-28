@@ -1,0 +1,172 @@
+<div class="row mb40">
+    <div class="form-group col-md-6">
+        <label class="col-md-3 filter-label">Target Exams</label>
+        <div class="col-md-7">
+            <select name="difficulty" class="form-control chosen multiple chosen-select"  multiple="" data-placeholder="Select exams" ng-change="filtersChange()" ng-model="filters.target_exams">
+                <option value="0">Any exam</option>
+                <option ng-repeat="(key, value) in Enums.TARGET_EXAMS" value="{{ key }}" ng-selected="filters.target_exams.indexOf(key) > -1">{{ value }}</option>
+            </select>
+        </div>
+    </div>
+    <div class="form-group col-md-6">
+        <label class="col-md-2 filter-label">Batches</label>
+        <div class="col-md-10">
+            <select name="batch_id" class="form-control chosen multiple chosen-select" multiple="" data-placeholder="Select batches" ng-change="filtersChange()" ng-model="filters.batches">
+                <option value="0">Any Batch</option>
+                <option ng-repeat="batch in batches" value="{{ batch.id }}" ng-selected="filters.batches.indexOf(batch.id) > -1">{{ batch.name }}</option>
+            </select>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">Top Performers</h3>
+            </div>
+            <div class="panel-body">
+                <div class="row mb10" ng-repeat="student in topStudents">
+                    <div class="col-md-8">
+                        {{ student.name }}
+                    </div>
+                    <div class="col-md-4">
+                        <span class="label label-danger" ng-show="student.attendance < 20">Very Irregular</span>
+                        <span class="label label-warning" ng-show="student.attendance > 20 && student.attendance <= 40">Irregular</span>
+                        <span class="label label-info" ng-show="student.attendance > 40 && student.attendance <= 50">Average</span>
+                        <span class="label label-primary" ng-show="student.attendance > 50 && student.attendance <= 80">Regular</span>
+                        <span class="label label-success" ng-show="student.attendance > 80">Very Regular</span>
+                    </div>
+                </div>
+                <div class="row" ng-show="topStudents.length == 0">
+                    <div class="alert alert-warning">
+                        NO DATA
+                    </div>
+                </div>
+            </div>
+        </div><!-- panel -->
+    </div>
+    <div class="col-md-6">
+        <div class="panel panel-warning">
+            <div class="panel-heading">
+                <h3 class="panel-title">Weak Performers</h3>
+            </div>
+            <div class="panel-body">
+                <div class="row mb10" ng-repeat="student in bottomStudents">
+                    <div class="col-md-8">
+                        {{ student.name }}
+                    </div>
+                    <div class="col-md-4">
+                        <span class="label label-danger" ng-show="student.attendance < 20">Very Irregular</span>
+                        <span class="label label-warning" ng-show="student.attendance > 20 && student.attendance <= 40">Irregular</span>
+                        <span class="label label-info" ng-show="student.attendance > 40 && student.attendance <= 50">Average</span>
+                        <span class="label label-primary" ng-show="student.attendance > 50 && student.attendance <= 80">Regular</span>
+                        <span class="label label-success" ng-show="student.attendance > 80">Very Regular</span>
+                    </div>
+                </div>
+                <div class="row" ng-show="bottomStudents.length == 0">
+                    <div class="alert alert-warning">
+                        NO DATA
+                    </div>
+                </div>
+            </div>
+        </div><!-- panel -->
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="col-md-2 col-md-offset-5 mb20">
+            <select class="form-control chosen chosen-select" ng-model="selectedSubject" ng-change="topTopicChanged()">
+                <option value="0">All Subjects</option>
+                <option ng-repeat="(subjectId, subjectName) in topSubjectNames" value="{{ subjectId }}">{{ subjectName }}</option>
+            </select>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title" style="display: inline-block;">Strong Topics</h3>
+                <!--<div class="topic-panel-subject-dropdown">
+                    <select class="form-control" ng-model="selectedTopSubject" ng-change="topTopicChanged()">
+                        <option value="0">All Subjects</option>
+                        <option ng-repeat="(subjectId, subjectName) in topSubjectNames" value="{{ subjectId }}">{{ subjectName }}</option>
+                    </select>
+                </div>-->
+            </div>
+            <div class="panel-body" ng-show="selectedSubject == 0">
+                <div class="row mb10" ng-repeat="topic in topTopics">
+                    <div class="col-md-8">
+                        {{ topic.name }}
+                    </div>
+                    <div class="col-md-4">
+                        {{ topic.subject_name }}
+                    </div>
+                </div>
+                <div class="row" ng-show="topTopics.length == 0">
+                    <div class="alert alert-warning">
+                        NO DATA
+                    </div>
+                </div>
+            </div>
+            <div class="panel-body" ng-show="selectedSubject != 0">
+                <div class="row mb10" ng-repeat="topic in topTopicsBySubject[selectedSubject]">
+                    <div class="col-md-8">
+                        {{ topic.name }}
+                    </div>
+                    <div class="col-md-4">
+                        {{ topic.subject_name }}
+                    </div>
+                </div>
+                <div class="row" ng-show="!topTopicsBySubject[selectedSubject] || topTopicsBySubject[selectedSubject].length == 0">
+                    <div class="alert alert-warning">
+                        NO DATA
+                    </div>
+                </div>
+            </div>
+        </div><!-- panel -->
+    </div>
+    <div class="col-md-6">
+        <div class="panel panel-warning">
+            <div class="panel-heading">
+                <h3 class="panel-title" style="display: inline-block;">Weak Topics</h3>
+                <!--<div class="topic-panel-subject-dropdown">
+                    <select class="form-control" ng-model="selectedBottomSubject" ng-change="bottomTopicChanged()">
+                        <option value="0">All Subjects</option>
+                        <option ng-repeat="(subjectId, subjectName) in bottomSubjectNames" value="{{ subjectId }}">{{ subjectName }}</option>
+                    </select>
+                </div>-->
+            </div>
+            <div class="panel-body" ng-show="selectedSubject == 0">
+                <div class="row mb10" ng-repeat="topic in bottomTopics">
+                    <div class="col-md-8">
+                        {{ topic.name }}
+                    </div>
+                    <div class="col-md-4">
+                        {{ topic.subject_name }}
+                    </div>
+                </div>
+                <div class="row" ng-show="bottomTopics.length == 0">
+                    <div class="alert alert-warning">
+                        NO DATA
+                    </div>
+                </div>
+            </div>
+            <div class="panel-body" ng-show="selectedSubject != 0">
+                <div class="row mb10" ng-repeat="topic in bottomTopicsBySubject[selectedSubject]">
+                    <div class="col-md-8">
+                        {{ topic.name }}
+                    </div>
+                    <div class="col-md-4">
+                        {{ topic.subject_name }}
+                    </div>
+                </div>
+                <div class="row" ng-show="!bottomTopicsBySubject[selectedSubject] || bottomTopicsBySubject[selectedSubject].length == 0">
+                    <div class="alert alert-warning">
+                        NO DATA
+                    </div>
+                </div>
+            </div>
+        </div><!-- panel -->
+    </div>
+</div>

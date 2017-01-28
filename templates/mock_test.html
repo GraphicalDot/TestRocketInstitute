@@ -1,0 +1,53 @@
+<div class="row mb40 text-center" ng-show="batches.length == 0">
+    <strong>Create a Batch to push this Mock Test</strong>
+</div>
+
+<div class="row mb40">
+    <h1 class="subtitle mb20">{{ mockTest.name }}</h1>
+    <ul class="nav nav-tabs nav-justified">
+        <li ng-repeat="subjectData in subjects" ng-class="{'active': $index == 0}"><a href="#s-{{ subjectData.id }}" data-toggle="tab"><strong>{{ subjectData.name }}</strong></a></li>
+    </ul>
+    <div class="tab-content">
+        <div class="tab-pane" id="s-{{ subjectData.id }}" ng-repeat="subjectData in subjects" ng-class="{'active': $index == 0}">
+            <div class="results-list">
+                <div class="media" ng-repeat="q_id in subjectData.q_ids" data-id="q_id">
+                    <span href="#" class="pull-left">{{ $index+1 }}).</span>
+                    <div class="media-body">
+                        <h4 class="filename text-primary" ng-bind-html="sce.trustAsHtml(questions[q_id].content)"></h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt40 mb20" ng-show="batches.length > 0">
+    <div class="form-group">
+        <div class="col-sm-2">
+            <select name="clazz" id="clazz" class="form-control chosen-select" data-placeholder="Select class" ng-change="changeClass()" ng-model="selectedClass">
+                <!--<option value="0">Select a class</option>-->
+                <option ng-repeat="(key, value) in Enums.BATCH_TYPE" value="{{ key }}" ng-selected="$index == 0">{{ value }}</option>
+            </select>
+        </div>
+        <div class="col-sm-6 from-inline" ng-repeat="(key, value) in Enums.BATCH_TYPE" ng-show="selectedClass == key" style="display: inline-flex;padding-top: 6px;">
+            <div class="ckbox ckbox-primary col-sm-2" ng-repeat="batch in batches" ng-if="batch.type == key">
+                <input type="checkbox" value="1" id="b-{{ batch.id }}" ng-checked="pushed_batches_ids[batch.id]" class="batch-checkbox" ng-model="pushed_batches_ids[batch.id]" ng-disabled="already_pushed_batch_ids[batch.id]">
+                <label for="b-{{ batch.id }}">{{ batch.name }}</label>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mb20" ng-show="batches.length > 0">
+    <div class="form-group">
+        <label class="col-sm-2 control-label">Batches Selected</label>
+        <div class="col-sm-6" style="min-height: 75px;background-color: white;color: black;" id="selected-batches">
+            <p ng-repeat="batch in batches" class="col-sm-2" ng-if="pushed_batches_ids[batch.id]">
+                {{ batch.name }}
+            </p>
+        </div>
+        <div class="col-sm-4" style="margin-top: 40px;">
+            <button class="btn btn-primary" ng-click="push()">Push</button>
+        </div>
+    </div>
+</div>

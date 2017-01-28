@@ -1,0 +1,100 @@
+<div class="row">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h4 class="panel-title"><span ng-if="!batch.id">Enter</span><span ng-if="batch.id">Edit</span> details of the batch</h4>
+        </div>
+        <div class="panel-body panel-body-nopadding">
+
+            <form class="form-horizontal form-bordered" ng-submit="submit()" name="batchForm">
+
+                <div class="form-group">
+                    <label class="col-sm-3 control-label" ng-class="{'has-error': error && error.name}">Unique Batch Name</label>
+                    <div class="col-sm-5">
+                        <input type="text" id="name" placeholder="Enter a unique name" class="form-control" ng-model="batch.name" ng-disabled="batch.id">
+                        <label class="error" for="name" ng-show="error && error.name">{{ error.message }}</label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-sm-3 control-label" style="margin-top: -6px;" id="days" ng-class="{'has-error': error && error.days}">Days</label>
+                    <div class="ckbox ckbox-primary col-sm-2" style="margin-left: 10px;">
+                        <input type="checkbox" value="1" id="on_weekdays" checked="checked" ng-model="batch.on_weekdays">
+                        <label for="on_weekdays">Weekdays</label>
+                        <label class="error" for="on_weekdays" ng-show="error && error.on_weekdays">{{ error.message }}</label>
+                    </div>
+                    <div class="ckbox ckbox-primary col-sm-2">
+                        <input type="checkbox" value="1" id="on_weekends" checked="checked" ng-model="batch.on_weekends">
+                        <label for="on_weekends">Weekends</label>
+                        <label class="error" for="on_weekends" ng-show="error && error.on_weekends">{{ error.message }}</label>
+                    </div>
+                    <br/>
+                    <label class="error" style="margin-left: -434px;" for="days" ng-show="error && error.days">{{ error.message }}</label>
+                </div>
+
+                <div class="form-group" style="padding-right: 5px;">
+                    <!--<label class="col-sm-3 control-label" ng-class="{'has-error': error && error.clazz}">Class</label>
+                    <div class="col-sm-2">
+                        <select name="clazz" id="clazz" class="form-control chosen-select" data-placeholder="Select class" ng-model="batch.clazz">
+                            <option ng-repeat="(key, value) in Enums.BATCH_CLASS" value="{{ key }}" ng-selected="key == batch.clazz">{{ value }}</option>
+                        </select>
+                        <label class="error" for="clazz" ng-show="error && error.clazz">{{ error.message }}</label>
+                    </div>-->
+                    <label class="col-sm-3 control-label" ng-class="{'has-error': error && error.target_exam}">Target Exams</label>
+                    <div class="col-sm-2">
+                        <select name="target_exam" id="target_exam" class="form-control chosen-select" data-placeholder="Select exam" ng-model="batch.target_exam">
+                            <option ng-repeat="(key, value) in Enums.TARGET_EXAMS" value="{{ key }}" ng-selected="key == batch.target_exam">{{ value }}</option>
+                        </select>
+                        <label class="error" for="target_exam" ng-show="error && error.target_exam">{{ error.message }}</label>
+                    </div>
+                    <label class="col-sm-1 control-label" ng-class="{'has-error': error && error.target_year}">Target Year</label>
+                    <div class="col-sm-2">
+                        <select name="target_year" id="target_year" class="form-control chosen-select" data-placeholder="Select year" ng-model="batch.target_year">
+                            <option ng-repeat="(key, value) in Enums.TARGET_YEARS" value="{{ key }}" ng-selected="key == batch.target_year">{{ value }}</option>
+                        </select>
+                        <label class="error" for="target_year" ng-show="error && error.target_year">{{ error.message }}</label>
+                    </div>
+                </div>
+
+                <div class="form-group" style="padding-right: 5px;">
+                    <label class="col-sm-3 control-label" ng-class="{'has-error': error && error.type}">Type</label>
+                    <div class="col-sm-2">
+                        <select name="type" id="type" class="form-control chosen-select" data-placeholder="Select type" ng-model="batch.type">
+                            <option ng-repeat="(key, value) in Enums.BATCH_TYPE" value="{{ key }}" ng-selected="key == batch.type">{{ value }}</option>
+                        </select>
+                        <label class="error" for="type" ng-show="error && error.type">{{ error.message }}</label>
+                    </div>
+                    <label class="col-sm-1 control-label" ng-class="{'has-error': error && error.other}" ng-show="batch.type == '4'">Other</label>
+                    <div class="col-sm-2" ng-show="batch.type == '4'">
+                        <input type="text" id="other" class="form-control" ng-model="batch.other">
+                        <label class="error" for="other" ng-show="error && error.other">{{ error.message }}</label>
+                    </div>
+                </div>
+
+                <div class="form-group batch-timings">
+                    <label class="col-sm-3 control-label" style="margin-top: 75px;" ng-class="{'has-error': error && error.start_time}">Batch Starts At</label>
+                    <div class="col-sm-2">
+                        <timepicker ng-model="batch.start_time" id="start_time" ng-change="changed()" hour-step="1" minute-step="1" show-meridian="false"></timepicker>
+                        <label class="error" for="start_time" ng-show="error && error.start_time">{{ error.message }}</label>
+                        <pre class="alert alert-info">{{batch.start_time | date:'shortTime' }}</pre>
+                    </div>
+                    <label class="col-sm-1 control-label" style="margin-top: 75px;" ng-class="{'has-error': error && error.end_time}">Batch Ends At</label>
+                    <div class="col-sm-2">
+                        <timepicker ng-model="batch.end_time" id="end_time" ng-change="changed()" hour-step="1" minute-step="1" show-meridian="false"></timepicker>
+                        <label class="error" for="end_time" ng-show="error && error.end_time">{{ error.message }}</label>
+                        <pre class="alert alert-info">{{batch.end_time | date:'shortTime' }}</pre>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-sm-6 col-sm-offset-3">
+                            <input type="submit" class="btn btn-primary" value="Save" ng-disabled="batchForm.$invalid">&nbsp;
+                            <input type="button" class="btn btn-default" value="Cancel" ng-click="cancel()">
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+        </div><!-- panel-body -->
+    </div>
+</div>
