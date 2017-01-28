@@ -27,7 +27,7 @@ define(['./module', '../services/index', 'underscore', 'jquery', 'store'], funct
        				 };
                     store.set('ins_user', user);
                      $http.defaults.headers.common['Authorization'] = 'Basic ' + btoa('institute' + '|' + user.id + ":" + user.password);
-           				$state.transitionTo('institute_analysis');
+           				$state.transitionTo('main');
                     
                     }
                     else {

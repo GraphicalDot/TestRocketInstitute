@@ -1,5 +1,3 @@
-<!DOCTYPE html>
-<html lang="en">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
@@ -42,7 +40,7 @@
                     <div class="btn-group" style="height: 100%;">
                         <button type="button" class="btn btn-default dropdown-toggle page-sections"
                                 ng-class="{'selected-header-menu-item': state.current.name == 'institute_analysis'}"
-                                ng-click="state.transitionTo('institute_analysis');" style="height: 100%;">
+                                ng-click="state.transitionTo('main.institute_analysis');" style="height: 100%;">
                             ANALYSIS
                         </button>
                     </div>
@@ -51,7 +49,7 @@
                     <div class="btn-group" style="height: 100%;">
                         <button type="button" class="btn btn-default dropdown-toggle page-sections"
                                 ng-class="{'selected-header-menu-item': ['batches', 'batch'].indexOf(state.current.name) > -1}"
-                                ng-click="state.transitionTo('batches');" style="height: 100%;">
+                                ng-click="state.transitionTo('main.batches');" style="height: 100%;">
                             BATCHES
                         </button>
                     </div>
@@ -60,7 +58,7 @@
                     <div class="btn-group" style="height: 100%;">
                         <button type="button" class="btn btn-default dropdown-toggle page-sections"
                                 ng-class="{'selected-header-menu-item': ['students', 'student', 'student_profile'].indexOf(state.current.name) > -1}"
-                                ng-click="state.transitionTo('students');" style="height: 100%;">
+                                ng-click="state.transitionTo('main.students');" style="height: 100%;">
                             STUDENTS
                         </button>
                     </div>
@@ -69,7 +67,7 @@
                     <div class="btn-group" style="height: 100%;">
                         <button type="button" class="btn btn-default dropdown-toggle page-sections"
                                 ng-class="{'selected-header-menu-item': ['mock_tests', 'mock_test'].indexOf(state.current.name) > -1}"
-                                ng-click="state.transitionTo('mock_tests');" style="height: 100%;">
+                                ng-click="state.transitionTo('main.mock_tests');" style="height: 100%;">
                             MOCK TESTS
                         </button>
                     </div>
@@ -117,6 +115,5 @@
 <script src="js/libs/respond.min.js"></script>
 <![endif]-->
 
-<script data-main="js/main.js" src="js/libs/require.js"></script>
 </body>
-</html>
+
