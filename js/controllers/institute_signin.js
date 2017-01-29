@@ -16,15 +16,18 @@ define(['./module', '../services/index', 'underscore', 'jquery', 'store'], funct
                     var token = response.data.token;
                     var tokenParts = token.split('|');
                  
-                    console.log(token)
-                    console.log(tokenParts)
-			        var user = {
+                    //console.log(token)
+                    //console.log(tokenParts)
+			        console.log(response)
+                    var user = {
           				  name: atob(tokenParts[3]),
             			id: parseInt(tokenParts[2]),
             				email: atob(tokenParts[0]),
             				password: tokenParts[1],
-            			type: 'institute'
+            			type: 'institute',
+                        logo: atob(tokenParts[4]) 
        				 };
+                     console.log(user)
                     store.set('ins_user', user);
                      $http.defaults.headers.common['Authorization'] = 'Basic ' + btoa('institute' + '|' + user.id + ":" + user.password);
            				$state.transitionTo('main');

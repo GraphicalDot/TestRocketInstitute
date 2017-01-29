@@ -70,6 +70,8 @@ define([
             }
             else{
                     $rootScope.user = store.get('ins_user');
+                    $rootScope.logo = $rootScope.user.logo;
+                    console.log($rootScope.logo)
                     console.log("From run app.js" + user)
                     $http.defaults.headers.common['Authorization'] = 'Basic ' + btoa('institute' + '|' + $rootScope.user.id + ":" + $rootScope.user.password);
             
