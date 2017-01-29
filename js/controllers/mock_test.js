@@ -2,6 +2,8 @@ define(['./module', '../services/index', 'underscore', 'jquery'], function (cont
     'use strict';
     controllers.controller('MockTestCtrl', ['$scope', '$state', '$sce', 'enums', '$timeout', 'Ontology', 'AvailableMockTest', 'Batches', function ($scope, $state, $sce, Enums, $timeout, Ontology, AvailableMockTest, Batches) {
 
+        //TARGET_EXAMS = {'1': 'JEE Advanced', '2': 'JEE Mains', '3': 'BITSAT', '4': 'AIPMT', '5': 'AIIMS', '6': 'NTSE'}
+        //Enums.BATCH_TYPE: {'1': 'Class 11', '2': 'Class 12', '3': 'Droppers', '4': 'Other'},
         $scope.sce = $sce;
         $scope.Enums = Enums;
         $scope.error = {};
@@ -20,12 +22,37 @@ define(['./module', '../services/index', 'underscore', 'jquery'], function (cont
                 $scope.ontology[node.id] = node;
             });
             Batches.list().$promise.then(function (bData) {
+                //This api returns the list of all the batches created by this
+                //institute bData = {"batches": batches}
+                //                 id            | 1
+                // name          | MyBatch
+                // on_weekdays   | t
+                // on_weekends   | f
+                // clazz         | 
+                // target_year   | 2015
+                // type          | 1    
+                // target_exam   | 1
+                // other         | 
+                // batch_timings | 10:0-11:0
+                // institute_id  | 2
+                // created_at    | 2017-01-28 20:30:42.240055
+                // status        | 1
+
                 $scope.batches = [];
                 bData.batches.forEach(function(batch) {
                     if (compatibleExams.indexOf(batch.target_exam) > -1)
                         $scope.batches.push(batch);
                 });
+
+                console.log($scope.batches) //all the batches will be pushed to $scope.bacthes i think
+                //$state.params.id is the id of the mock test on which push button has been clicked 
+                // from the mock_test_list.html
                 AvailableMockTest.get({id: $state.params.id}).$promise.then(function (mData) {
+                    //response will have two keys "mock_test" and "questions"
+                    // mock_test.batches_pushed_to = [{'id': b.id, 'name': b.name, 'class': b.clazz} for b in batches]
+                    //above is copied from backend to show that key batches_pushed_to is an array 
+                    // of objects all of which are batches to whom this mock test has already been pushed
+                    // questions key is a list of questions with each entry being a question test and question id
                     $scope.mockTest = mData.mock_test;
                     $scope.pushed_batches_ids = {};
                     $scope.mockTest.batches_pushed_to.forEach(function (b) {
@@ -44,6 +71,7 @@ define(['./module', '../services/index', 'underscore', 'jquery'], function (cont
                             q_ids: $scope.mockTest.question_ids[sid].q_ids
                         };
                     }
+                    console.log($scope.subjects)
                     $timeout(function () {
                         $(".chosen-select").chosen({
                             'width': '100%',
@@ -65,8 +93,8 @@ define(['./module', '../services/index', 'underscore', 'jquery'], function (cont
                 }).join(',')
             };
             AvailableMockTest.push(postData).$promise.then(function (data) {
-                window.history.back();
-                hideLoader();
+               // window.history.back();
+                $state.transitionTo("main.mock_tests");
             });
 
         };

@@ -47,7 +47,7 @@
     <div class="col-sm-1" ng-hide="students.length == 0 && (!filters.query || filters.query == '')" style="margin-top: 3px;">
         <button class="btn btn-warning" ng-click="filters.query='';filtersChange();" ng-disabled="!(filters.query && filters.query != '')">Clear</button>
     </div>
-    <a ui-sref="student" class="pull-right"><button class="btn btn-primary btn-lg">Add Student</button></a>
+    <a ui-sref="main.student" class="pull-right"><button class="btn btn-primary btn-lg">Add Student</button></a>
 </div>
 
 <div class="row">

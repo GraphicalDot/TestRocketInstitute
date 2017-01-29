@@ -40,7 +40,7 @@ define(['./module', '../services/index', 'underscore', 'jquery'], function (cont
                     delete $scope.filters[f];
                 }
             }
-            $state.transitionTo('batches', $scope.filters);
+            $state.transitionTo('main.batches', $scope.filters);
         };
 
         $scope.deactivate = function (id) {

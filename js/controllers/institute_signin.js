@@ -34,8 +34,8 @@ define(['./module', '../services/index', 'underscore', 'jquery', 'store'], funct
                         $scope.isloggedIn = true;
                     }              
                     
-                        }, function(response, satus,  headers, config){
-                                console.log(response)
+                        }, function(errResponse, satus,  headers, config){
+                                console.log("Error Occurred" + response)
 
                         });
 

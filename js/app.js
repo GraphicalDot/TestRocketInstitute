@@ -53,8 +53,15 @@ define([
             };
         })*/
         .run(['$rootScope', '$state', '$http', function($rootScope, $state, $http) {
+             $('.dropdown-toggle').dropdown()
+            $rootScope.$on('$stateChangeSuccess', 
+                    function(event, toState, toParams, fromState, fromParams){ 
+                          $('.dropdown-toggle').dropdown()
+
+                     }
+            );
             var user = store.get("ins_user")
-            console.log(user);
+            //console.log(user);
             if (user == undefined ){
                     $state.transitionTo('institute_signin')
                 }

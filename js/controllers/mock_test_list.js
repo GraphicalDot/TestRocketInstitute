@@ -6,6 +6,9 @@ define(['./module', '../services/index', 'underscore', 'jquery'], function (cont
         $state.params.page = $state.params.page ? parseInt($state.params.page) : 1;
         $state.params.limit = $state.params.limit ? parseInt($state.params.limit) : DEFAULT_PAGE_LIMIT;
 
+        //$state params that this page accepts difficulty
+        //batches_pushed_to
+        //page&limit'
         if ($state.params.batches_pushed_to instanceof Array)
             $state.params.batches_pushed_to = $state.params.batches_pushed_to.map(function (b) {
                 return parseInt(b);
@@ -20,7 +23,13 @@ define(['./module', '../services/index', 'underscore', 'jquery'], function (cont
             limit: $state.params.limit,
             offset: ($state.params.page-1)*$state.params.limit
         };
+        console.log($scope.filters)
+        ﻿
+        //ABove console will print Object {difficulty: 0, batches_pushed_to: 0, page: 1, limit: 10, offset: 0}
 
+
+        //WHen the page loads for the first time, it will get data from Batches
+        //Service with the default $scope.filters
         $scope.applyFilters = function() {
             showLoader();
             var filterData = angular.copy($scope.filters);
@@ -30,13 +39,20 @@ define(['./module', '../services/index', 'underscore', 'jquery'], function (cont
             }
             var batchList = Batches.list(filterData);
             batchList.$promise.then(function (bData) {
-                $scope.batches = bData.batches;
+                console.log(bData)
+                $scope.batches = bData.batches; //Gets a list of batches based on the filters 
+
                 if (filterData.batches_pushed_to instanceof Array)
                     filterData.batches_pushed_to = filterData.batches_pushed_to.join(',');
+                console.log(filterData)
                 AvailableMockTests.list(filterData).$promise.then(function (mData) {
                     $scope.totalItems = mData.total;
                     $scope.totalPages = Math.ceil($scope.totalItems/filterData.limit);
                     $scope.mock_tests = mData.mock_tests;
+
+                    //mock_tests.batches_pushed_to would have a list of single entry
+                    // of the array of {"id", "name"} where name corresponds to the name of the bacthes
+                    // to which this mock test has been pushed
                     $scope.mock_tests.forEach(function(mock_test) {
                         mock_test.batches_str = _.pluck(mock_test.batches_pushed_to, 'name').join(',');
                     });
@@ -59,7 +75,7 @@ define(['./module', '../services/index', 'underscore', 'jquery'], function (cont
                     delete $scope.filters[f];
                 }
             }
-            $state.transitionTo('mock_tests', $scope.filters);
+            $state.transitionTo('main.mock_tests', $scope.filters);
         };
 
         $scope.goToPage = function(event, pageNo) {
@@ -72,7 +88,7 @@ define(['./module', '../services/index', 'underscore', 'jquery'], function (cont
                     delete $scope.filters[f];
                 }
             }
-            $state.transitionTo('mock_tests', $scope.filters);
+            $state.transitionTo('main.mock_tests', $scope.filters);
             return false;
         };
 

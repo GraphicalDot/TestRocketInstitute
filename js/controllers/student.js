@@ -103,7 +103,7 @@ define(['./module', '../services/index', 'underscore', 'jquery'], function (cont
                             $(".chosen-select").val('').trigger("chosen:updated");
                         }
                         else
-                            window.history.back();
+                            $state.transitionTo("main.students");
                         hideLoader();
                     }, function (resp) {
                         hideLoader();

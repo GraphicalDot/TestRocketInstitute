@@ -90,7 +90,7 @@ define(['./module', '../services/index', 'underscore', 'jquery'], function (cont
                     delete $scope.filters[f];
                 }
             }
-            $state.transitionTo('students', $scope.filters);
+            $state.transitionTo('main.students', $scope.filters);
             return false;
         };
 
