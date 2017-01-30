@@ -72,7 +72,7 @@
                     <td>{{ batch.target_year }}</td>
                     <td>{{ Enums.TARGET_EXAMS[batch.target_exam] }}</td>
                     <td class="table-action">
-                        <a ui-sref="batch({id: batch.id})"><button class="btn btn-warning">Edit</button></a>
+                        <a ui-sref="main.batch({id: batch.id})"><button class="btn btn-warning">Edit</button></a>
                     </td>
                     <td class="table-action" ng-show="batch.status == 1">
                         <button class="btn btn-danger" ng-click="deactivate(batch.id)">Deactivate</button>
