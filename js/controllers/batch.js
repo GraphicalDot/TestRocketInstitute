@@ -118,12 +118,17 @@ define(['./module', '../services/index', 'underscore', 'jquery'], function (cont
                 postData.target_year = parseInt($scope.batch.target_year);
                 postData.batch_timings = $scope.batch.start_time.getHours() + ':' + $scope.batch.start_time.getMinutes()
                 + '-' + $scope.batch.end_time.getHours() + ':' + $scope.batch.end_time.getMinutes();
+                    
+                //If we are editing the existing batch, On batches_list.html
+                //If we goign to click the edit button for a batch then this
+                // COntroller will have a batch_id from the $state.params, This is just cheking if thats th e
+                //the case, then it will make a post request on the esisting batch_id
                 if ('id' in $scope.batch) {
                     postData.id = $scope.batch.id;
                     delete postData['status'];
                     Batch.update(postData).$promise.then(function(data) {
                         if (!data.error) {
-                            window.history.back();
+                            $state.transitionTo("main.batches")
 			    hideLoader();
                         } else {
                             $scope.error.name = true;
@@ -132,10 +137,13 @@ define(['./module', '../services/index', 'underscore', 'jquery'], function (cont
 			    				    hideLoader();
                         }
                     });
-                } else {
+                }
+
+                //If the batch is newly created, then it will not have a batch_id yet
+                 else {
                     Batches.create(postData).$promise.then(function(data) {
                         if (!data.error) {
-                            window.history.back();
+                            $state.transitionTo("main.batches")
 			    hideLoader();
                         } else {
                             $scope.error.name = true;
@@ -153,7 +161,8 @@ define(['./module', '../services/index', 'underscore', 'jquery'], function (cont
             }
             //console.log($scope.batch);
         };
-	
+	   //submit function logic completed
+
 		  var styleChosen = function() {
             $timeout(function () {
                 $(".chosen-select").chosen({

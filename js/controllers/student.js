@@ -122,7 +122,7 @@ define(['./module', '../services/index', 'underscore', 'jquery'], function (cont
         };
 
         $scope.cancel = function () {
-            window.history.back();
+            $state.go("main.students")
         };
 
         var styleChosen = function () {

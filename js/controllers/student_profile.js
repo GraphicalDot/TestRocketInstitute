@@ -12,7 +12,7 @@ define(['./module', '../services/index', 'underscore', 'jquery'], function (cont
             };
 
             $scope.backToList = function() {
-                window.history.back();
+               $state.go("main.students")
             };
 
             Student.get({id: $state.params.id, profile: 1}).$promise.then(function (sDdata) {

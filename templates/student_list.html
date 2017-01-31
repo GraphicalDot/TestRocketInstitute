@@ -37,10 +37,12 @@
     </div>
 </div>
 
-<div class="row mb10" ng-hide="batches.length == 0">
+<div class="row mb10" ng-hide="batches.length == 0"> <!-- To =make sure that institue doesnt create any students without creating batch first-->
     <div class="col-sm-3" ng-hide="students.length == 0 && (!filters.query || filters.query == '')">
         <input type="search" placeholder="Search by name" class="form-control" ng-model="filters.query" ng-keypress="search($event)">
     </div>
+
+    <!-- This div id will not be visible if students.length == 0 and (!filters.query || filters.query == '') -->
     <div class="col-sm-1" ng-hide="students.length == 0 && (!filters.query || filters.query == '')" style="margin-top: 3px;">
         <button class="btn btn-info" ng-click="filtersChange()" ng-disabled="!(filters.query && filters.query != '')">Search</button>
     </div>
@@ -77,7 +79,7 @@
                         <a ui-sref="main.student({id: student.id})"><button class="btn btn-warning">Edit</button></a>
                     </td>
                     <td class="table-action">
-                        <a ui-sref="student_profile({id: student.id})"><button class="btn btn-primary">View Profile</button></a>
+                        <a ui-sref="main.student_profile({id: student.id})"><button class="btn btn-primary">View Profile</button></a>
                     </td>
                 </tr>
                 </tbody>
